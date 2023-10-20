@@ -1,0 +1,34 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('source code pull from github') {
+            steps {
+                git branch: 'master', url: 'https://github.com/nayeem1011/sprig-boot.git'
+            }
+        }
+
+
+        stage('build number tag') {
+            steps {
+               sh 'BUILD_NUMBER="${BUILD_NUMBER}"
+               IMAGE_NAME="nayemnjs/jenkins2:$BUILD_NUMBER"
+               docker build -t $IMAGE_NAME .
+               docker run -d -p 8034:8080'
+            }
+        }
+
+        stage('login') {
+            steps {
+                sh '"dockerhub" | docker login -u nayeemnjs --password-stdin'
+            }
+            }
+        stage('push') {
+            steps {
+                sh 'docker push nayeemnjs/springboot:tagname:$BUILD_NUMBER'
+            }
+            }
+
+        }
+
+}
