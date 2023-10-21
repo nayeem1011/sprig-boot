@@ -1,5 +1,9 @@
 pipeline {
     agent any
+    environment {
+        
+        IMAGE_NAME = "nayeemnjs/jenkins2:${BUILD_NUMBER}"
+    }
 
     stages {
         stage('source code pull from github') {
@@ -11,8 +15,6 @@ pipeline {
 
         stage('build number tag') {
             steps {
-               sh 'BUILD_NUMBER=${BUILD_NUMBER}'
-               sh 'IMAGE_NAME="nayemnjs/jenkins2:$BUILD_NUMBER"'
                sh 'docker build -t $IMAGE_NAME .'
                sh 'docker run -d -p 8085:8080'
             }
@@ -25,7 +27,7 @@ pipeline {
             }
         stage('push') {
             steps {
-                sh 'docker push nayeemnjs/springboot:tagname:$BUILD_NUMBER'
+                sh 'docker push nayeemnjs/springboot:${BUILD_NUMBER}'
             }
             }
 
