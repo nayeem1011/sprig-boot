@@ -11,10 +11,10 @@ pipeline {
 
         stage('build number tag') {
             steps {
-               sh 'BUILD_NUMBER="${BUILD_NUMBER}"
-               IMAGE_NAME="nayemnjs/jenkins2:$BUILD_NUMBER"
-               docker build -t $IMAGE_NAME .
-               docker run -d -p 8085:8080'
+               sh 'BUILD_NUMBER=${BUILD_NUMBER}'
+               sh 'IMAGE_NAME="nayemnjs/jenkins2:$BUILD_NUMBER"'
+               sh 'docker build -t $IMAGE_NAME .'
+               sh 'docker run -d -p 8085:8080'
             }
         }
 
